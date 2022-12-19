@@ -18,3 +18,4 @@ b = 5 #6
 c = 6 #6
 d = str(a) + str(b) + str(c) #6
 print(d) #6
+
