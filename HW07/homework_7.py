@@ -29,7 +29,10 @@ while True:
             print("\033[31m{}".format(f"Вибачте, ім\'я {name_add} вже є у телефонній книзі. Спробуйте інше ім\'я."))
     elif command == 'delete':
         name_del = input('Введіть ім\'я контакту, який хочете видалити:\n')
-        del contacts[name_del]
+        if name_del not in contacts:
+            print("\033[31m{}".format("У телефонній книзі немає контакту з таким ім\'ям"))
+        else:
+            del contacts[name_del]
     elif command == 'contacts_list':
         for contact in contacts:
             print(contact)
