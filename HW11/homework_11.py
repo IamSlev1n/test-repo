@@ -27,6 +27,8 @@ with ContextManager():
         def multiply_two(num):
             print(num * 2)
 
+        multiply_two(5)
+
         class MyCustomException(Exception):
             def __init__(self, message):
                 self.message = message
