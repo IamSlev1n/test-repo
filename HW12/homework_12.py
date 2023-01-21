@@ -56,6 +56,7 @@ while True:
         if name_add not in contacts:
             phone = input('Введіть номер телефону контакту, який хочете додати, у форматі \"+xxxxxxx\" :\n')
             contacts[name_add] = phone
+            write(contacts, "contact_book.json")
         else:
             print("\033[31m{}".format(f"Вибачте, ім\'я {name_add} вже є у телефонній книзі. Спробуйте інше ім\'я."))
     elif command == 'delete':
@@ -64,6 +65,7 @@ while True:
             print("\033[31m{}".format("У телефонній книзі немає контакту з таким ім\'ям"))
         else:
             del contacts[name_del]
+            write(contacts, "contact_book.json")
     elif command == 'contacts_list':
         for contact in contacts:
             print(contact)
@@ -74,7 +76,7 @@ while True:
         print(contacts)
     else:
         print("\033[31m{}".format("Команда не розпізнана, спробуйте ще раз, будь-ласка."))
-    write(contacts, "contact_book.json")
+
 
 
     class MyCustomException(Exception):
