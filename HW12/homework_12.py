@@ -37,8 +37,14 @@ contacts_list - shows name of all
 show_name - shows contact phone number by name
 show_all - shows full dict
 """
+try:
+    file_name = input("Insert a name of contact book:\n")
+    contacts = read(file_name)
+except FileNotFoundError:
+    data = {}
+    contacts = write(data, file_name)
+    contacts = read(file_name)
 while True:
-    contacts = read("contact_book.json")
     command = input("\033[37m{}".format("\nВітаємо в телефонній книзi!\n\n"
                     "Команди які можна використовувати:\n"
                     "   stats - показує кількість контактів\n"
@@ -56,7 +62,7 @@ while True:
         if name_add not in contacts:
             phone = input('Введіть номер телефону контакту, який хочете додати, у форматі \"+xxxxxxx\" :\n')
             contacts[name_add] = phone
-            write(contacts, "contact_book.json")
+            write(contacts, file_name)
         else:
             print("\033[31m{}".format(f"Вибачте, ім\'я {name_add} вже є у телефонній книзі. Спробуйте інше ім\'я."))
     elif command == 'delete':
@@ -65,7 +71,7 @@ while True:
             print("\033[31m{}".format("У телефонній книзі немає контакту з таким ім\'ям"))
         else:
             del contacts[name_del]
-            write(contacts, "contact_book.json")
+            write(contacts, file_name)
     elif command == 'contacts_list':
         for contact in contacts:
             print(contact)
