@@ -60,17 +60,17 @@ while True:
     elif command == 'add':
         name_add = input('Insert a name of contact you want to add:\n')
         if name_add not in contacts:
-            pattern = '^(\\+380|380|80|0)[0-9]{9}$'
+            pattern = '^(\\+380|380|0)[0-9]{9}$'
             phone = input('Insert contact\'s phone in format \"+380xxxxxxxxx\" :\n')
             ukr_phones = re.match(pattern, phone)
             if ukr_phones:
                 contacts[name_add] = ukr_phones.group()
                 write(contacts, file_name)
+                print("New contact added successfully")
             else:
                 print(f"Invalid format of {phone} phone number. You can use:"
                       "+380********* or "
                       "380********* or "
-                      "80********* or "
                       "0*********")
         else:
             print("\033[31m{}".format(f"Sorry, name {name_add} is already in contacts book. Try another name"))
@@ -91,21 +91,4 @@ while True:
         print(contacts)
     else:
         print("\033[31m{}".format("Command unknown. Try one more time"))
-
-
-    class MyCustomException(Exception):
-        def __init__(self, message):
-            self.message = message
-            file_error = open("exception_log.txt", "a+")
-            file_error.write(f"Exception with message '{message}' faced at {datetime.now()}\n")
-            file_error.close()
-
-
-    inp = input("Input some integer:")
-
-    try:
-        if not inp.isdigit():
-            raise MyCustomException("Custom exception is occurred")
-    except MyCustomException as exc:
-        pass
 

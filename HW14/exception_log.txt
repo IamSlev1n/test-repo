@@ -1,1 +1,0 @@
-Exception with message 'Custom exception is occurred' faced at 2023-01-25 21:52:41.303636
