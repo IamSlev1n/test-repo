@@ -18,18 +18,18 @@ class ContextManager:
 
 
 with ContextManager():
-    print(1/0)
+    # print(1/0)
 
     def name_time_decorator(func):
         def inner1(*args, **kwargs):
             print(f"Function {func.__name__} started at {datetime.now()}")
-            func(*args, **kwargs)
+            return func(*args, **kwargs)
         return inner1
 
 
     @name_time_decorator
     def multiply_two(num):
-        print(num * 2)
+        return num * 2
 
 
     result = multiply_two
@@ -51,9 +51,11 @@ with ContextManager():
 
 try:
     print("="*10)
-    result(5)
+    print(result(int(inp)))
 except NameError:
     print("Seems like name is not found")
+except ValueError:
+    print("Seems like you entered not an integer")
 else:
     print("Here is your result!")
 finally:
