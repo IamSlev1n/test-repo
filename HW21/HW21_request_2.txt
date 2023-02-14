@@ -1,0 +1,1 @@
+SELECT COUNT(id) AS users_quantity FROM users WHERE age > 30
