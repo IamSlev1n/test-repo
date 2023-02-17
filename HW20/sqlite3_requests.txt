@@ -1,0 +1,6 @@
+INSERT INTO new_table(first_name, last_name, age) VALUES
+              ("Vadym", "Demchenko", 29),
+              ("Michael", "Orlando", 25),
+              ("Jerry", "Tompson", 22),
+              ("Eniko", "Snow", 39),
+              ("Alex", "Sheppart", 16)
