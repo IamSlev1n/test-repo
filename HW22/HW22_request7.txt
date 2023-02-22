@@ -1,0 +1,4 @@
+SELECT SUM(books.price) as sales_value_UAH, COUNT(purchase.id) AS sales_quantity, books.author
+FROM purchase
+JOIN books ON purchase.book_id = books.id
+GROUP BY books.author
