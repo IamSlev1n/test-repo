@@ -24,7 +24,7 @@ class TelegramBot(Bot):
         self.chat_id = chat_id
 
     def send_message(self, message):
-        print(f"{self.name} bot says {message} to chat {self.chat_id} using url {self.set_url()}")
+        print(f"{self.name} bot says {message} to chat {self.chat_id} using url {self.url}")
 
 
 some_bot = Bot("Marvin")
@@ -40,13 +40,15 @@ telegram_bot.say_name()
 telegram_bot.send_message('Hello')
 
 telegram_bot.set_chat_id(1)
+telegram_bot.set_url("any url")
+
 
 telegram_bot.send_message('Hello')
 
 
 class MyStr(str):
     def __str__(self):
-        return super().__str__().upper()
+        return self.upper()
 
 
 my_str = MyStr("test")
@@ -55,10 +57,10 @@ print(my_str)
 
 class User:
     def __init__(self, name):
-        self.name = name.lower()
+        self.name = name
 
     def __eq__(self, other_name):
-        return self.name == other_name.name
+        return self.name.lower() == other_name.name.lower()
 
 
 first_user = User('OLEKSII')
