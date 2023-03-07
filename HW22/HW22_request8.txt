@@ -1,0 +1,5 @@
+SELECT books.title, COUNT(purchase.id) AS sales_quantity
+FROM books
+JOIN purchase ON books.id = purchase.book_id
+GROUP BY books.title
+ORDER BY sales_quantity desc
