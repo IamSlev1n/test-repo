@@ -1,0 +1,147 @@
+.header {
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+    background: beige;
+    align-items: center;
+}
+
+.photo-container {
+    padding: 10%;
+}
+
+.name {
+    text-align: center;
+    color: saddlebrown;
+    font-size: clamp(20px, 6vw, 80px);
+}
+
+.container {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+
+}
+
+.sidebar {
+    text-align: justify;
+    padding: 10%;
+}
+.sidebar-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.main-block {
+    text-align: center;
+    padding-left: 4%;
+}
+
+.my-text {
+    margin: 4% 0px;
+    font-weight: bold;
+    font-size: large;
+}
+
+.title {
+    font-weight: bold;
+    font-size: large;
+    margin: 10% 0px;
+}
+
+.my_table {
+    border: 1px solid black;
+    width: 98%;
+    text-align: center;
+    border-collapse: collapse;
+    margin: 1%;
+}
+
+th, td {
+    border: 1px solid black;
+}
+
+
+.work-place {
+    display: grid;
+    width: 98%;
+    grid-template-columns: 2fr 2fr 2fr 6fr;
+    margin: 25px 10px 25px 10px;
+}
+
+.responsibilities {
+    text-align: justify;
+    padding: 0px 20px;
+
+}
+
+
+.contacts-image > img {
+    width: 20px;
+}
+
+.link > a {
+    text-decoration: none;
+    color: black;
+}
+
+.link > a:hover {
+    text-decoration: underline;
+    color: saddlebrown;
+}
+
+.btn {
+    border: none;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 25px 80px;
+    display: inline-block;
+    margin: 15px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    background: #2ecc71;
+    color: #fff;
+}
+
+.btn:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+/* Pseudo elements for icons */
+.btn:before {
+    font-family: 'FontAwesome';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+    line-height: 3;
+    font-size: 140%;
+    width: 60px;
+}
+
+.btn:active {
+  background: #c0392b;
+  top: 2px;
+}
+
+.btn:hover {
+    background: #27ae60;
+}
+
