@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Params</title>
+</head>
+<body>
+    {% if username %}
+    <h1>Вітаю, {{ username }}!</h1>
+    <button><a href="/logout">Log out</a></button>
+    {% endif %}
+    <br>
+    <table>
+        <tr>
+            <th>параметр</th>
+            <th> | </th>
+            <th>значення</th>
+        </tr>
+        {% for key, value in params_dict.items() %}
+        <tr>
+            <td>{{ key }}</td>
+            <td> | </td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <button><a href="/">Головна сторінка</a></button>
+</body>
+</html>

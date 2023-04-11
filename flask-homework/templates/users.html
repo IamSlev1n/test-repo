@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+    {% if username %}
+    <h1>Вітаю, {{ username }}!</h1>
+    <button><a href="/logout">Log out</a></button>
+    {% endif %}
+    <br>
+    <h1>Список користувачів:</h1>
+    <ul>
+        {% for name in names %}
+        <li>{{ name }}</li>
+        {% endfor %}
+    </ul>
+    <button><a href="/">Головна сторінка</a></button>
+</body>
+</html>

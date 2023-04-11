@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+</head>
+<body>
+    {% if username %}
+    <h1>Вітаю, {{ username }}!</h1>
+    <button><a href="/logout">Log out</a></button>
+    {% endif %}
+    <ul>
+        {% for link in links %}
+        <li style="color:black"><a href="{{ link.url }}">{{ link.text }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
