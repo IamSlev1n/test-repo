@@ -8,10 +8,10 @@ app = Flask(__name__, template_folder='templates')
 app.secret_key = secret_key
 
 
-# @app.route('/hello')
-# def hello():
-#     logging.info('Here is logging info')
-#     return 'Hello, world!'
+@app.route('/hello')
+def hello():
+    logging.info('Here is logging info')
+    return 'Hello, world!'
 
 
 @app.route('/users')
