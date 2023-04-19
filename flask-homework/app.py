@@ -1,9 +1,11 @@
-from flask import Flask, request, abort, redirect, render_template_string
+from flask import Flask, request, abort, redirect,render_template, session
 import logging
 import random
+from key import secret_key
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
+app.secret_key = secret_key
 
 
 @app.route('/hello')
@@ -14,6 +16,9 @@ def hello():
 
 @app.route('/users')
 def users():
+    username = session.get('username')
+    if not username:
+        return redirect('/login')
     names = ['Dmitro', 'Oleh', 'Andriy', 'Olga', 'Natalya', 'Sergiy']
     # Записуємо в змінну значення параметру count
     count = request.args.get('count')
@@ -33,16 +38,19 @@ def users():
         return 'В параметр "count" має бути передане "позитивне" значення'
     # Перемішуємо список імен
     random.shuffle(names)
-    # Повертаємо поєднані комою всі імена з сформованого і перемішаного списку
-    return ', '.join(names[0:count])
+    # Повертаємо зформований і перемішаний список імен
+    return render_template('users.html', names=names[0:count], username=username)
 
 
 @app.route('/users/<int:user_id>')
 def get_user(user_id):
+    username = session.get('username')
+    if not username:
+        return redirect('/login')
     # Перевіряємо чи ділиться айді користувача на 2 без залишку (тобто кратне 2)
     if user_id % 2 == 0:
-        # Якщо так - повертаємо відформатований рядок
-        return f'Це користувач з id {user_id}'
+        # Якщо так - повертаємо відформатований рядок у темплейті
+        return render_template('users_id.html', user_id=user_id, username=username)
     else:
         # Якщо ні - повертаємо статус 404 Page not found
         return abort(404)
@@ -50,6 +58,9 @@ def get_user(user_id):
 
 @app.route('/books')
 def get_books():
+    username = session.get('username')
+    if not username:
+        return redirect('/login')
     books = [
         'Harry Potter: Philosopher\'s Stone',
         'Harry Potter: Chamber of Secrets',
@@ -78,48 +89,51 @@ def get_books():
         return 'В параметр "count" має бути передане "позитивне" значення'
     # Перемішуємо список книг
     random.shuffle(books)
-    # Повертаємо список кожним рядком котрого буде назва книги зі списку
+    # Повертаємо список в темлейті, кожним рядком котрого буде назва книги зі списку
     # Довжина списку це значення переданого параметру count (якщо він є),
     # або рандомне число від 1 до довжини списку
-    return '<ul>' + ''.join([f'<li>{book}</li>' for book in books[:count]]) + '</ul>'
+    return render_template('books.html', books=books[:count], count=count, username=username)
 
 
 @app.route('/books/<title>')
 def get_book(title):
+    username = session.get('username')
+    if not username:
+        return redirect('/login')
     # Переводимо першу літеру рядка у верхній регістр
     new_title = title.capitalize()
-    return new_title
+    return render_template('books_title.html', new_title=new_title, username=username)
 
 
 @app.route('/params')
 def params():
+    username = session.get('username')
+    if not username:
+        return redirect('/login')
     # Отримуємо query parameters з запиту
     params_dict = request.args.to_dict()
-    # Генеруємо HTML таблицю з query parameters
-    html = "<table>"
-    # Генеруємо хедер таблиці
-    html += "<tr><th>parameter</th><th>value</th></tr>"
-    # Робимо цикл для перебору ключів і значень параметрів
-    for key, value in params_dict.items():
-        # додаємо до нашої таблиці ключі і значення у відповідні місця
-        html += f"<tr><td>{key}</td><td>{value}</td></tr>"
-    html += "</table>"
-    # Повертаємо згенеровану HTML таблицю
-    return html
+    # Якщо параметри були пустими ...
+    if not params_dict:
+        names = ['Dmitro', 'Oleh', 'Andriy', 'Olga', 'Natalya', 'Sergiy']
+        ages = random.randint(18, 55)
+        cities = ['Kyiv', 'Lviv', 'Odessa', 'Chernigiv', 'Brovary', 'Kharkiv']
+        # ... генеруємо рандомні параметри
+        params_dict = {
+            'name': random.choice(names),
+            'age': ages,
+            'city': random.choice(cities)
+        }
+    return render_template('params.html', params_dict=params_dict, username=username)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    username = session.get('username')
+    if username:
+        return render_template('current_user.html', username=username)
     # За замовчуванням отримуємо GET при переході на ендпоінт
     if request.method == 'GET':
-        # Форма для вводу логіну і паролю
-        form = '''<form method="post" style="text-align:center;margin-top:20%">
-                <input type="text" name="username" placeholder="Username"><br><br>
-                <input type="password" name="password" placeholder="Password"><br><br>
-                <input type="submit" value="Submit">
-            </form>'''
-        # Яку ми повертаємо на GET запит
-        return form
+        return render_template('login.html')
     # А якщо запит POST (тобто клікнута кнопка sumbit)
     elif request.method == 'POST':
         # Беремо данні з полів логіну і паролю
@@ -127,12 +141,13 @@ def login():
         password = request.form.get('password')
         # І якщо обидва поля були не пустими ...
         if username and password:
-            # ... робимо редірект на іншу сторінку ...
-            return redirect('/users')
+            # ... робимо редірект на головну сторінку записавши username в сессію ...
+            session['username'] = username
+            return redirect('/')
         # ... а якщо хоч одне поле було пустим ...
         else:
             # Сповіщуємо про помилку і надаємо статус-код 400
-            abort(400, 'Відсутній логін або пароль')
+            return render_template('login.html', error="Відсутній логін або пароль", username=username), 400
 
 
 @app.errorhandler(404)
@@ -167,20 +182,26 @@ def internal_server_error(e):
 
 @app.route('/', methods=['GET'])
 def home_page():
+    username = session.get('username')
+    if not username:
+        return redirect('/login')
+    # Бібліотека посилань для головної сторінки
     links = [
         {'url': '/login', 'text': 'Login'},
         {'url': '/users', 'text': 'Users'},
         {'url': '/books', 'text': 'Books'},
         {'url': '/params', 'text': 'Params'}
     ]
-    html = render_template_string('''
-           <ul>
-           {% for link in links %}
-                <li style="color:black"><a href="{{ link.url }}">{{ link.text }}</a></li>
-           {% endfor %} 
-           </ul> 
-    ''', links=links)
-    return html
+    # Виводимо посилання списком у темлейті
+    return render_template('homepage.html', links=links, username=username)
+
+
+@app.route('/logout')
+def logout():
+    # Функція що при кліку по кнопці Log out стирає ім`я користувача з сесії ...
+    session.pop('username', None)
+    # ...і робить редірект на сторінку авторизації
+    return redirect('/login')
 
 
 app.run()

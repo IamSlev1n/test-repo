@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+</head>
+<body>
+    {% if username %}
+    <h1>Вітаю, {{ username }}!</h1>
+    <button><a href="/logout">Log out</a></button>
+    {% endif %}
+    <br>
+    <h1>Список книг</h1>
+    <p>Кількість книг: {{ count }}</p>
+    <ul>
+    {% for book in books[:count] %}
+        <li>{{ book }}</li>
+    {% endfor %}
+    </ul>
+    <button><a href="/">Головна сторінка</a></button>
+</body>
+</html>
