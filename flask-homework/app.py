@@ -1,11 +1,45 @@
-from flask import Flask, request, abort, redirect,render_template, session
+from flask import Flask, request, abort, redirect, render_template, session, jsonify
+from flask_sqlalchemy import SQLAlchemy
+import os
 import logging
 import random
-from key import secret_key
+from dotenv import load_dotenv
 
 
+load_dotenv()
+db = SQLAlchemy()
 app = Flask(__name__, template_folder='templates')
-app.secret_key = secret_key
+app.secret_key = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_test.db'
+app.config['JSON_SORT_KEYS'] = False
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
+    age = db.Column(db.Integer, nullable=False)
+
+
+class Book(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    author = db.Column(db.String)
+    year = db.Column(db.Integer)
+    price = db.Column(db.Integer)
+
+
+class Purchase(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User')
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    book = db.relationship('Book')
+    date = db.Column(db.String)
 
 
 @app.route('/hello')
@@ -15,6 +49,94 @@ def hello():
 
 
 @app.route('/users')
+def db_users():
+    size = request.args.get('size')
+    if size is None:
+        db_users = User.query.all()
+    else:
+        db_users = User.query.limit(size).all()
+    users_json = [{'id': user.id,
+                   'first_name': user.first_name,
+                   'last_name': user.last_name,
+                   'age': user.age} for user
+                  in db_users]
+    print(users_json)
+    return jsonify(users_json)
+
+
+@app.route('/users/<int:user_id>')
+def get_db_users(user_id):
+    get_db_users = User.query.get(user_id)
+    if not get_db_users:
+        abort(404)
+    users_json = {'id': get_db_users.id,
+                  'first_name': get_db_users.first_name,
+                  'last_name': get_db_users.last_name,
+                  'age': get_db_users.age}
+    return jsonify(users_json)
+
+
+@app.route('/books')
+def db_books():
+    size = request.args.get('size')
+    if size is None:
+        db_books = Book.query.all()
+    else:
+        db_books = Book.query.limit(size).all()
+    books_json = [{'id': book.id,
+                   'title': book.title,
+                   'author': book.author,
+                   'year': book.year,
+                   'price': book.price}
+                  for book in db_books]
+    return jsonify(books_json)
+
+
+@app.route('/books/<int:book_id>')
+def get_db_book(book_id):
+    get_db_book = Book.query.get(book_id)
+    if not get_db_book:
+        abort(404)
+    books_json = {'id': get_db_book.id,
+                  'title': get_db_book.title,
+                  'author': get_db_book.author,
+                  'year': get_db_book.year,
+                  'price': get_db_book.price}
+    return jsonify(books_json)
+
+
+@app.route('/purchase')
+def db_purchase():
+    size = request.args.get('size')
+    if size is None:
+        db_purchase = Purchase.query.all()
+    else:
+        db_purchase = Purchase.query.limit(size).all()
+    purchase_json = [{'id': purchase.id,
+                      'user_id': purchase.user_id,
+                      'user_name': f"{purchase.user.first_name} {purchase.user.last_name}",
+                      'book_id': purchase.book_id,
+                      'book_title': purchase.book.title,
+                      'date': purchase.date}
+                     for purchase in db_purchase]
+    return jsonify(purchase_json)
+
+
+@app.route('/purchase/<int:purchase_id>')
+def get_db_purchase(purchase_id):
+    get_db_purchase = Purchase.query.get(purchase_id)
+    if not get_db_purchase:
+        abort(404)
+    purchase_json = {'id': get_db_purchase.id,
+                      'user_id': get_db_purchase.user_id,
+                      'user_name': f"{get_db_purchase.user.first_name} {get_db_purchase.user.last_name}",
+                      'book_id': get_db_purchase.book_id,
+                      'book_title': get_db_purchase.book.title,
+                      'date': get_db_purchase.date}
+    return jsonify(purchase_json)
+
+
+@app.route('/users_html')
 def users():
     username = session.get('username')
     if not username:
@@ -42,7 +164,7 @@ def users():
     return render_template('users.html', names=names[0:count], username=username)
 
 
-@app.route('/users/<int:user_id>')
+@app.route('/users_html/<int:user_id>')
 def get_user(user_id):
     username = session.get('username')
     if not username:
@@ -56,7 +178,7 @@ def get_user(user_id):
         return abort(404)
 
 
-@app.route('/books')
+@app.route('/books_html')
 def get_books():
     username = session.get('username')
     if not username:
@@ -95,7 +217,7 @@ def get_books():
     return render_template('books.html', books=books[:count], count=count, username=username)
 
 
-@app.route('/books/<title>')
+@app.route('/books_html/<title>')
 def get_book(title):
     username = session.get('username')
     if not username:
@@ -188,8 +310,8 @@ def home_page():
     # Бібліотека посилань для головної сторінки
     links = [
         {'url': '/login', 'text': 'Login'},
-        {'url': '/users', 'text': 'Users'},
-        {'url': '/books', 'text': 'Books'},
+        {'url': '/users_html', 'text': 'Users'},
+        {'url': '/books_html', 'text': 'Books'},
         {'url': '/params', 'text': 'Params'}
     ]
     # Виводимо посилання списком у темлейті
