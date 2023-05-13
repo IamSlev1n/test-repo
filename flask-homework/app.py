@@ -60,7 +60,6 @@ def db_users():
                    'last_name': user.last_name,
                    'age': user.age} for user
                   in db_users]
-    print(users_json)
     return jsonify(users_json)
 
 
