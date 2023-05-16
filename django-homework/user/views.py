@@ -1,7 +1,10 @@
-from django.http import HttpResponse
+from django.shortcuts import render
+from django.http import JsonResponse
+from user.models import User
 
 
-def my_view(request):
-    return HttpResponse('Hello, world!')
-
-
+# Create your views here.
+def users_view(request):
+    users = User.objects.all().values()
+    data = {"users": list(users)}
+    return JsonResponse(data)

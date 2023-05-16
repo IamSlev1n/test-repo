@@ -2,6 +2,7 @@ venv/
 .env
 db.sqlite3
 # Byte-compiled / optimized / DLL files
+robot_app/__pycache__/
 __pycache__/
 *.py[cod]
 *$py.class
