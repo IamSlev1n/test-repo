@@ -7,15 +7,12 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-db = SQLAlchemy()
 app = Flask(__name__, template_folder='templates')
 app.secret_key = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flask_test.db'
 app.config['JSON_SORT_KEYS'] = False
+db = SQLAlchemy()
 db.init_app(app)
-
-with app.app_context():
-    db.create_all()
 
 
 class User(db.Model):
@@ -40,6 +37,10 @@ class Purchase(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     book = db.relationship('Book')
     date = db.Column(db.String)
+
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/hello')
