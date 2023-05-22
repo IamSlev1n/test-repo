@@ -9,3 +9,8 @@ class User(models.Model):
 
     class Meta:
         db_table = 'user'
+        verbose_name = 'user'
+        verbose_name_plural = 'users'
+
+    def __str__(self):
+        return f"{self.id}: {self.first_name} {self.last_name}"
