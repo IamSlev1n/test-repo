@@ -13,3 +13,6 @@ class Purchase(models.Model):
         db_table = 'purchase'
         ordering = ['-date']
 
+    def __str__(self):
+        return f"User {self.user} purchased book {self.book} on {self.date}"
+
