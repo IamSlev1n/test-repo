@@ -1,10 +1,18 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from user.models import User
+from .models import User
+from .forms import UserForm
+from django.views.generic import ListView, DetailView, CreateView
 
 
 # Create your views here.
-def users_view(request):
-    users = User.objects.all().values()
-    data = {"users": list(users)}
-    return JsonResponse(data)
+class UserListView(ListView):
+    model = User
+
+
+class UserDetailView(DetailView):
+    model = User
+
+
+class UserCreateView(CreateView):
+    model = User
+    fields = '__all__'
+    success_url = '/users/'

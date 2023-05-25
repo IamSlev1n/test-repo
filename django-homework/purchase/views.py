@@ -1,13 +1,17 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from purchase.models import Purchase
-from django.core.serializers import serialize
-import datetime
+from .models import Purchase
+from django.views.generic import ListView, DetailView, CreateView
 
 
 # Create your views here.
-def purchases_view(request):
-    purchases = Purchase.objects.all().values()
-    data = {"purchases": list(purchases)}
-    return JsonResponse(data)
+class PurchaseListView(ListView):
+    model = Purchase
 
+
+class PurchaseDetailView(DetailView):
+    model = Purchase
+
+
+class PurchaseCreateView(CreateView):
+    model = Purchase
+    fields = '__all__'
+    success_url = '/purchases/'

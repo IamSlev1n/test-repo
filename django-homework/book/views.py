@@ -1,11 +1,17 @@
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
-from book.models import Book
-import json
+from .models import Book
+from django.views.generic import ListView, DetailView, CreateView
 
 
 # Create your views here.
-def books_view(request):
-    books = Book.objects.all().values()
-    data = {"books": list(books)}
-    return JsonResponse(data)
+class BookListView(ListView):
+    model = Book
+
+
+class BookDetailView(DetailView):
+    model = Book
+
+
+class BookCreateView(CreateView):
+    model = Book
+    fields = '__all__'
+    success_url = '/books/'
