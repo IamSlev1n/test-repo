@@ -4,6 +4,7 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import BookSerializer
 import django_filters
 from rest_framework import filters
+from robot_app.filters import BookFilter
 
 
 # Create your views here.
@@ -19,17 +20,6 @@ class BookCreateView(CreateView):
     model = Book
     fields = '__all__'
     success_url = '/books/list/'
-
-
-class BookFilter(django_filters.FilterSet):
-    class Meta:
-        model = Book
-        fields = {
-            'title': ['contains'],
-            'author': ['contains'],
-            'year': ['gt', 'gte', 'lt', 'lte', 'exact'],
-            'price': ['gt', 'gte', 'lt', 'lte', 'exact']
-        }
 
 
 class BookViewSet(ModelViewSet):

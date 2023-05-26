@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import filters
 import django_filters
+from robot_app.filters import PurchaseFilter
 
 
 # Create your views here.
@@ -19,15 +20,6 @@ class PurchaseCreateView(CreateView):
     model = Purchase
     fields = '__all__'
     success_url = '/purchases/list/'
-
-
-class PurchaseFilter(django_filters.FilterSet):
-    class Meta:
-        model = Purchase
-        fields = {
-            'user_id': ['exact'],
-            'book_id': ['exact']
-        }
 
 
 class PurchaseViewSet(ModelViewSet):

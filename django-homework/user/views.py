@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
+from robot_app.filters import UserFilter
 
 
 # Create your views here.
@@ -20,16 +21,6 @@ class UserCreateView(CreateView):
     model = User
     fields = '__all__'
     success_url = '/users/list/'
-
-
-class UserFilter(django_filters.FilterSet):
-    class Meta:
-        model = User
-        fields = {
-            'first_name': ['contains'],
-            'last_name': ['contains'],
-            'age': ['gt', 'gte', 'lt', 'lte', 'exact']
-        }
 
 
 class UserViewSetPagination(PageNumberPagination):
