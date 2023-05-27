@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'book.apps.BookConfig',
     'purchase.apps.PurchaseConfig',
     'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,9 @@ WSGI_APPLICATION = 'robot_app.wsgi.application'
 # REST framework
 
 REST_FRAMEWORK = {
-    # 'PAGE_SIZE': 5,
+    'PAGE_SIZE': 5,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend', ]
 }
 
 # Database
