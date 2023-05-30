@@ -1,4 +1,6 @@
 def fib_num_gen(n):
+    if n <= 0:
+        raise ValueError("Введене значення має бути позитивним цілим числом")
     f1, f2 = 1, 1
     for num in range(n):
         yield f1
@@ -13,6 +15,9 @@ print("Знайдемо значення числа з послідовност�
 
 
 def fib_num_recursion(n):
+    if n <= 0:
+        raise ValueError("Введене значення має бути позитивним цілим числом")
+
     if n in (1, 2):
         return 1
     return fib_num_recursion(n-1) + fib_num_recursion(n-2)
